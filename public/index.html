@@ -1,74 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Socket.io Chat</title>
-  <style>
-    body { 
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-    }
-    #messages { 
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      height: 300px;
-      overflow-y: scroll;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-    #messages li {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
-    #form {
-      display: flex;
-      gap: 10px;
-    }
-    #input {
-      flex: 1;
-      padding: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
+  <title>UChat聊天室</title>
+  <link rel="stylesheet" href="./index.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./index.js"></script>
 </head>
 <body>
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input id="input" autocomplete="off" />
-    <button>Send</button>
-  </form>
+  <!-- 登录页面 -->
+  <div id="login">
+    <div class="login_box">
+      <div class="login_title">请输入昵称</div>
+      <input class="login_input" type="text" id="nicknameInput" placeholder="你的昵称" spellcheck="false" />
+      <button class="login_button" onclick="setNickname()">进入聊天室</button>
+    </div>
+  </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const form = document.getElementById('form');
-    const input = document.getElementById('input');
-    const messages = document.getElementById('messages');
+  <!-- 聊天页面 -->
+  <div id="chat">
+    <div class="header">
+      <div class="chat_online"></div>
+      <div class="myinfo">
+        <div class="modify" onclick="onModifyNickNameClick()">修改昵称</div>
+        <div class="avatar">U</div>
+      </div>
+    </div>
+    <ul id="messages"></ul>
+    <form id="chatForm">
+      <input id="chatInput" autocomplete="off" />
+      <button id="chatButton">发送</button>
+    </form>
+  </div>
 
-    // 处理消息提交
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', input.value);
-        input.value = '';
-      }
-    });
-
-    // 接收消息
-    socket.on('chat message', (msg) => {
-      const li = document.createElement('li');
-      li.textContent = msg;
-      messages.appendChild(li);
-      // 自动滚动到底部
-      messages.scrollTop = messages.scrollHeight;
-    });
-  </script>
+  <!-- 修改昵称 -->
+  <div class="modify_nickname">
+    <div class="login_box">
+      <div class="login_title">修改昵称</div>
+      <input id="mNicknameInput" class="login_input" type="text" placeholder="你的昵称" spellcheck="false" />
+      <button class="login_button" onclick="modifyNickname()">确认</button>
+    </div>
+  </div>
 </body>
 </html>
