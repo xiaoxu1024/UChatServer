@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.io Chat</title>
+  <style>
+    body { 
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    #messages { 
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    #messages li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    #form {
+      display: flex;
+      gap: 10px;
+    }
+    #input {
+      flex: 1;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" autocomplete="off" />
+    <button>Send</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+
+    // 处理消息提交
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+
+    // 接收消息
+    socket.on('chat message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+      // 自动滚动到底部
+      messages.scrollTop = messages.scrollHeight;
+    });
+  </script>
+</body>
+</html>
