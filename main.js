@@ -50,7 +50,9 @@ io.on('connection', (socket) => {
       isSelf: msg.isSelf,
       nickname: socket.nickname,
       content: msg.content,
-      timestamp: new Date().toLocaleTimeString()
+      timestamp: new Date().toLocaleTimeString({
+        timeZone: 'Asia/Shanghai',
+      })
     });
   });
 
